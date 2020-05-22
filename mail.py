@@ -4,7 +4,7 @@ from email.message import EmailMessage
 class Email:
 	"""
 	Class so that one SMTP connection is maintained for all emails
-  """
+	"""
 	def __init__(self, host, port, username, password, *, smtp_tls=False, smtp_ssl=False):
 		self.username = username
 

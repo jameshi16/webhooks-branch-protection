@@ -2,7 +2,7 @@
 
 Too poor to afford Pro? Still need some sort of branch protection found in the Pro plan? If you've got [`ngrok`](https://ngrok.com/), and a cheap computer like a Raspberry Pi, this project _might_ be for you.
 
-This project is built on Python 3.6.8, with the explicitly defined package versions in `requirements.txt`. Try to use a WCGI server instead of the development server (i.e. `python main.py`) in production.
+This project is built on Python 3.6.8, with the explicitly defined package versions in `requirements.txt`. Try to use a WSGI server instead of the development server (i.e. `python main.py`) in production.
 
 ## Pre-requisites
 
