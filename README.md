@@ -13,28 +13,28 @@ Please ensure you have `git` installed and linked on your system. In the deploym
 The config file, `config.json` generally looks like this:
 ```json
 {
-	"secret": "you share this secret with Github's Webhook page, value is whatever you want",
-	"repos": [
-		{
-			"name": "<org/personal name>/<repo>, like jameshi16/PTRPG",
-			"branch": "branch name to protect. typically master or production or release",
-			"url": "the HTTPS clone URL, or the SSH clone URL. e.g. git@github.com:jameshi16/PTRPG",
-		}
-	],
-	"commit_user": {
-		"name": "name of the user to commit the reverting changes to. does not have to be a real user",
-		"email": "email of the user to commit the reverting changes to. does not have to be a real email"
-	},
-	"smtp": {
-		"enabled": true,
-		"host": "smtp server host",
-		"port": 587,
-		"username": "username@email.com",
-		"password": "insert password here",
-		"use_tls": true,
-		"use_ssl": false
-	},
-	"notify_emails": ["list@email.com", "of@email.com", "emails@email.com", "to@email.com", "notify@email.com"]
+  "secret": "you share this secret with Github's Webhook page, value is whatever you want",
+  "repos": [
+    {
+      "name": "<org/personal name>/<repo>, like jameshi16/PTRPG",
+      "branch": "branch name to protect. typically master or production or release",
+      "url": "the HTTPS clone URL, or the SSH clone URL. e.g. git@github.com:jameshi16/PTRPG",
+    }
+  ],
+  "commit_user": {
+    "name": "name of the user to commit the reverting changes to. does not have to be a real user",
+    "email": "email of the user to commit the reverting changes to. does not have to be a real email"
+  },
+  "smtp": {
+    "enabled": true,
+    "host": "smtp server host",
+    "port": 587,
+    "username": "username@email.com",
+    "password": "insert password here",
+    "use_tls": true,
+    "use_ssl": false
+  },
+  "notify_emails": ["list@email.com", "of@email.com", "emails@email.com", "to@email.com", "notify@email.com"]
 }
 ```
 
@@ -43,11 +43,11 @@ The config file, `config.json` generally looks like this:
 The SMTP settings `use_tls` and `use_ssl` are used for STARTTLS or SSL SMTP server connections respectively. Consult your email provider's manuals to figure out which one is being used. To disable notifications, set `enabled` to `false`, which ignores the existence of the other SMTP settings.
 
 ```json
-	...
-	"smtp": {
-		"enabled": false
-	},
-	...
+  ...
+  "smtp": {
+    "enabled": false
+  },
+  ...
 ```
 
 #### Gmail
@@ -56,14 +56,14 @@ The SMTP settings `use_tls` and `use_ssl` are used for STARTTLS or SSL SMTP serv
 2. Use the following SMTP configuration:
     ```json
     "smtp": {
-			"enabled": true,
-			"host": "smtp.google.com",
-			"port": 587,
-			"username": "googleaccount@gmail.com",
-			"password": "putpasswordhere",
-			"use_tls": true
+      "enabled": true,
+      "host": "smtp.google.com",
+      "port": 587,
+      "username": "googleaccount@gmail.com",
+      "password": "putpasswordhere",
+      "use_tls": true
     }
-		```
+    ```
 
 ## Private Repositories
 
