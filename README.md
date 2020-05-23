@@ -98,6 +98,11 @@ After creating `config.json`, run the container with the following command:
 docker run --mount type=bind,source=$PWD/config.json,target=/var/www/branch-protection/config.json branch-protection:latest
 ```
 
+**Quirk**: For some reason (don't want to investigate further), `git clone` doesn't work immediately due to some issue involving SSH, nginx, WCGI and/or Python. Hence the Docker's starting script runs a fire-and-ignore SSH command to get the gears going, which fixes the `git clone` issue. Therefore, it is okay if you see this command fail at the start of your logs (like `git@github.com: Permission denied (publickey)`).
+```
+su www-data -s /bin/bash -c "ssh -o StrictHostKeyChecking=no git@github.com"
+```
+
 ### SSH Keys
 
 If you chose to use deploy keys, you need to create the required SSH resources. Typically, you'd create a folder, generate SSH keys with `ssh-keygen`, and create a SSH `config` file. These keys will be copied to `/var/www/.ssh` from your mountpoint at `/var/.ssh` (this is done so I can `chown -R www-data:www-data` without ruining your host files), so any absolute paths will need to contain `/var/www/.ssh`.

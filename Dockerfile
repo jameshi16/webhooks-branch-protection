@@ -19,6 +19,9 @@ service apache2 start \n\
 mkdir -p /home/www-data \n\
 cp -r /var/.ssh /var/www/.ssh \n\
 chown -R www-data:www-data /var/www/.ssh \n\
+chmod 600 /var/www/.ssh/* \n\
+chmod 644 /var/www/.ssh/config \n\
+su www-data -s /bin/bash -c "ssh -o StrictHostKeyChecking=no git@github.com" \n\
 tail -f /var/log/apache2/error.log /var/log/apache2/other_vhosts_access.log' > /var/start_script.sh
 RUN chmod +x /var/start_script.sh
 ENTRYPOINT /var/start_script.sh
