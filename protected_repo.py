@@ -5,7 +5,7 @@ import json
 import os
 
 ENABLE_PR_PROGRESS_PRINTER = False # in multithreaded env, the printing isn't that pretty.
-CACHE_FOLDER = ".cache"
+CACHE_FOLDER = os.path.join(os.path.dirname(__file__), ".cache/")
 
 class PRProgressPrinter(RemoteProgress):
 	"""

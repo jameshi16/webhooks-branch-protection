@@ -71,7 +71,7 @@ It is highly recommended that you setup cloning of private repositories over Dep
 
 ### Using a Deploy key
 
-Generate a SSH key and paste the public key portion in the deploy key setting within the repository of your choice. Remember to check the `Write access` checkbox so that the webhook can automatically revert the errornous commits.
+Generate a SSH key and paste the public key portion in the deploy key setting within the repository of your choice. Remember to check the `Write access` checkbox so that the webhook can automatically revert the erroneous commits.
 
 1. On the server where this script will be run, place the private key in to the `~/.ssh` folder.
 2. Test if you can clone a repository using the normal `git clone` command.
@@ -83,3 +83,36 @@ Generate a personal access token through your personal account, or through a [ma
 
 1. This [shortcut](https://github.com/settings/tokens) should bring you to the personal access tokens page
 2. The "URL" field in the configuration should be: `https://<username>:<access token>@github.com/<username/org name>/<repo>.git` 
+
+## Dockerfile
+
+The Dockerfile in the repository builds the `branch-protection` docker image, which runs `mod_wsgi` with `Apache2`. All of the required files to run the server, except for `config.json` and any SSH keys will be copied into the resultant image.
+
+Build the docker image:
+```
+docker build . -t branch-protection
+```
+
+After creating `config.json`, run the container with the following command:
+```
+docker run --mount type=bind,source=$PWD/config.json,target=/var/www/branch-protection/config.json branch-protection:latest
+```
+
+### SSH Keys
+
+If you chose to use deploy keys, you need to create the required SSH resources. Typically, you'd create a folder, generate SSH keys with `ssh-keygen`, and create a SSH `config` file. These keys will be copied to `/var/www/.ssh` from your mountpoint at `/var/.ssh` (this is done so I can `chown -R www-data:www-data` without ruining your host files), so any absolute paths will need to contain `/var/www/.ssh`.
+
+```
+mkdir ssh
+ssh-keygen -b 4096 -t rsa -C branch-protection -f ssh/key
+touch ssh/config
+cat << EOF > ssh/config
+Host github.com
+  IdentityFile /var/www/.ssh/key
+EOF
+```
+
+Then, you'd copy the `.pub` version into the `Deploy keys` section of your Github repository, and then run the container with the following command:
+```
+docker run --mount type=bind,source=$PWD/config.json,target=/var/www/branch-protection/config.json --mount type=bind,source=$PWD/ssh,target=/var/.ssh branch-protection:latest
+```

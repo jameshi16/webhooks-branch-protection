@@ -7,6 +7,7 @@ from mail import Email, FakeEmail
 import json
 import os
 
+basepath = os.path.dirname(__file__)
 CONFIG_FILE = "config.json"
 
 def load_config(filename):
@@ -23,7 +24,7 @@ def load_config(filename):
 		"notify_emails": []
 	}
 	try:
-		user_config = json.load(open(filename, mode='r'))
+		user_config = json.load(open(os.path.join(basepath, filename), mode='r'))
 		config.update(user_config)
 		return config
 	except JSONDecodeError as e:
@@ -77,7 +78,7 @@ if config['smtp'] != {} and config['smtp']['enabled']:
 # Protected Repository object per repository_map
 for repository_map in repository_maps:
 	name = repository_map['name']
-	path = '.cache/' + name.lower().replace('/', '_')
+	path = os.path.join(basepath, '.cache/', name.lower().replace('/', '_'))
 	branch = repository_map['branch']
 	url = repository_map['url']
 	commit_user_name = config['commit_user']['name']
