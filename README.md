@@ -43,7 +43,7 @@ Please ensure you have `git` installed and linked on your system. In the deploym
     ```
 3. Create a SSH configuration file under `ssh/config`.
     ```
-    cat << EOF > ssh/config
+    $ cat << EOF > ssh/config
     Host github.com
       IdentityFile /var/www/.ssh/key
     EOF
@@ -72,7 +72,7 @@ Please ensure you have `git` installed and linked on your system. In the deploym
     - Follow the instructions on `ngrok` [getting started](https://dashboard.ngrok.com/get-started/setup) to create an account and configure `ngrok`.
     - Run:
         ```
-        ./ngrok http <ip-address-to-docker-here>:80
+        $ ./ngrok http <ip-address-to-docker-here>:80
         ```
 12. Navigate to your repository's "Webhooks" settings page.
     ![Web hooks](.readme/webhooks_001.png)
@@ -172,17 +172,17 @@ The Dockerfile in the repository builds the `branch-protection` docker image, wh
 
 Build the docker image:
 ```
-docker build . -t branch-protection
+$ docker build . -t branch-protection
 ```
 
 After creating `config.json`, run the container with the following command:
 ```
-docker run --mount type=bind,source=$PWD/config.json,target=/var/www/branch-protection/config.json branch-protection:latest
+$ docker run --mount type=bind,source=$PWD/config.json,target=/var/www/branch-protection/config.json branch-protection:latest
 ```
 
 **Quirk**: For some reason (don't want to investigate further), `git clone` doesn't work immediately due to some issue involving SSH, nginx, WCGI and/or Python. Hence the Docker's starting script runs a fire-and-ignore SSH command to get the gears going, which fixes the `git clone` issue. Therefore, it is okay if you see this command fail at the start of your logs (like `git@github.com: Permission denied (publickey)`).
 ```
-su www-data -s /bin/bash -c "ssh -o StrictHostKeyChecking=no git@github.com"
+$ su www-data -s /bin/bash -c "ssh -o StrictHostKeyChecking=no git@github.com"
 ```
 
 ### SSH Keys
@@ -190,10 +190,10 @@ su www-data -s /bin/bash -c "ssh -o StrictHostKeyChecking=no git@github.com"
 If you chose to use deploy keys, you need to create the required SSH resources. Typically, you'd create a folder, generate SSH keys with `ssh-keygen`, and create a SSH `config` file. These keys will be copied to `/var/www/.ssh` from your mountpoint at `/var/.ssh` (this is done so I can `chown -R www-data:www-data` without ruining your host files), so any absolute paths will need to contain `/var/www/.ssh`.
 
 ```
-mkdir ssh
-ssh-keygen -N '' -b 4096 -t rsa -C branch-protection -f ssh/key
-touch ssh/config
-cat << EOF > ssh/config
+$ mkdir ssh
+$ ssh-keygen -N '' -b 4096 -t rsa -C branch-protection -f ssh/key
+$ touch ssh/config
+$ cat << EOF > ssh/config
 Host github.com
   IdentityFile /var/www/.ssh/key
 EOF
@@ -201,5 +201,5 @@ EOF
 
 Then, you'd copy the `.pub` version into the `Deploy keys` section of your Github repository, and then run the container with the following command:
 ```
-docker run --mount type=bind,source=$PWD/config.json,target=/var/www/branch-protection/config.json --mount type=bind,source=$PWD/ssh,target=/var/.ssh branch-protection:latest
+$ docker run --mount type=bind,source=$PWD/config.json,target=/var/www/branch-protection/config.json --mount type=bind,source=$PWD/ssh,target=/var/.ssh branch-protection:latest
 ```
